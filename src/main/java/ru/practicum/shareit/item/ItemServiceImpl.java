@@ -38,8 +38,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<Item> searchItem(String searchRequest, long userId) {
         userRepository.getUserById(userId);
-        String normalizeSearchRequest = searchRequest.toLowerCase().trim();
-        return itemRepository.searchItem(normalizeSearchRequest, userId);
+        String preparedRequest = searchRequest.toLowerCase().trim();
+        return itemRepository.searchItem(preparedRequest, userId);
     }
 
     @Override

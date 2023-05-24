@@ -52,7 +52,7 @@ public class ItemController {
     @GetMapping("/search")
     public Collection<Item> searchItem(@RequestParam("text") String searchRequest,
                                        @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("Пользователь с ID={} ищет: \"{}\"", userId, searchRequest);
+        log.info("Пользователь с ID={} пытался найти: \"{}\"", userId, searchRequest);
         return itemService.searchItem(searchRequest, userId);
     }
 

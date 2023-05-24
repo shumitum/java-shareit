@@ -2,7 +2,10 @@ package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 @Component
 public class UserRepositoryImpl implements UserRepository {
@@ -17,12 +20,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUser(long userId, User user) {
-        users.put(userId, user);
-        return getUserById(userId);
-    }
-
-    @Override
     public User getUserById(long userId) {
         if (users.containsKey(userId)) {
             return users.get(userId);
@@ -34,6 +31,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Collection<User> getAllUsers() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public User updateUser(long userId, User user) {
+        users.put(userId, user);
+        return getUserById(userId);
     }
 
     @Override
