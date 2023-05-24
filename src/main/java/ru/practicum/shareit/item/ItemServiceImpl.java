@@ -57,8 +57,10 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItemById(long itemId, long userId) {
         userRepository.getUserById(userId);
         Item item = itemRepository.getItemById(itemId);
-        if (item.getOwnerId() == userId & item.getAvailable()) {
-            itemRepository.deleteItemById(itemId);
+        if (item.getOwnerId() == userId) {
+            if (item.getAvailable()) {
+                itemRepository.deleteItemById(itemId);
+            }
         } else {
             throw new IllegalArgumentException("Удалить вещь может только её владелец");
         }

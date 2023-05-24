@@ -29,9 +29,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(long userId, User user) {
         User updatingUser = userRepository.getUserById(userId);
-        if (user.getEmail() != null & !updatingUser.getEmail().equals(user.getEmail())) {
-            userValidateService.validateEmail(user.getEmail());
-            updatingUser.setEmail(user.getEmail());
+        if (user.getEmail() != null) {
+            if (!updatingUser.getEmail().equals(user.getEmail())) {
+                userValidateService.validateEmail(user.getEmail());
+                updatingUser.setEmail(user.getEmail());
+            }
         }
         if (user.getName() != null) {
             updatingUser.setName(user.getName());

@@ -42,8 +42,9 @@ public class ItemRepositoryImpl implements ItemRepository {
         List<Item> searchResult = new LinkedList<>();
         if (!searchRequest.isBlank()) {
             for (Item item : items.values().stream().filter(Item::getAvailable).collect(Collectors.toList())) {
-                if (item.getName().toLowerCase().contains(searchRequest) |
-                        item.getDescription().toLowerCase().contains(searchRequest)) {
+                if (item.getName().toLowerCase().contains(searchRequest)) {
+                    searchResult.add(item);
+                } else if (item.getDescription().toLowerCase().contains(searchRequest)) {
                     searchResult.add(item);
                 }
             }
