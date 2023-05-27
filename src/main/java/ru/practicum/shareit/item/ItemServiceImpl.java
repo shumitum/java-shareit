@@ -7,7 +7,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,40 +18,46 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
 
     @Override
-    public Item createItem(ItemDto itemDto, long userId) {
+    public ItemDto createItem(ItemDto itemDto, long userId) {
         userRepository.getUserById(userId);
-        Item item = ItemMapper.toItem(itemDto);
+        Item item = ItemMapper.itemDtotoItem(itemDto);
         item.setOwnerId(userId);
-        return itemRepository.createItem(item);
+        return ItemMapper.itemToItemDto(itemRepository.createItem(item));
     }
 
     @Override
-    public Item getItemById(long itemId) {
-        return itemRepository.getItemById(itemId);
+    public ItemDto getItemById(long itemId) {
+        return ItemMapper.itemToItemDto(itemRepository.getItemById(itemId));
     }
 
     @Override
-    public Collection<Item> getUserItems(long userId) {
+    public List<ItemDto> getUserItems(long userId) {
         userRepository.getUserById(userId);
-        return itemRepository.getUserItems(userId);
+        return itemRepository.getUserItems(userId)
+                .stream()
+                .map(ItemMapper::itemToItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Collection<Item> searchItem(String searchRequest, long userId) {
+    public List<ItemDto> searchItem(String searchRequest, long userId) {
         userRepository.getUserById(userId);
         String preparedRequest = searchRequest.toLowerCase().trim();
-        return itemRepository.searchItem(preparedRequest, userId);
+        return itemRepository.searchItem(preparedRequest, userId)
+                .stream()
+                .map(ItemMapper::itemToItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Item updateItem(long itemId, ItemDto itemDto, long ownerId) {
+    public ItemDto updateItem(long itemId, ItemDto itemDto, long ownerId) {
         Item updatingItem = itemRepository.getItemById(itemId);
         if (ownerId == updatingItem.getOwnerId()) {
             itemRepository.updateItem(itemId, itemDto);
         } else {
             throw new IllegalArgumentException("Редактировать информацию о вещи может только её владелец");
         }
-        return itemRepository.getItemById(itemId);
+        return ItemMapper.itemToItemDto(itemRepository.getItemById(itemId));
     }
 
     @Override

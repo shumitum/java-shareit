@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
 

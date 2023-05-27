@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,20 +34,19 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Collection<Item> getUserItems(long userId) {
+    public List<Item> getUserItems(long userId) {
         return items.values().stream()
                 .filter(item -> item.getOwnerId() == userId)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Collection<Item> searchItem(String searchRequest, long userId) {
+    public List<Item> searchItem(String searchRequest, long userId) {
         List<Item> searchResult = new LinkedList<>();
         if (!searchRequest.isBlank()) {
             for (Item item : items.values().stream().filter(Item::getAvailable).collect(Collectors.toList())) {
-                if (item.getName().toLowerCase().contains(searchRequest)) {
-                    searchResult.add(item);
-                } else if (item.getDescription().toLowerCase().contains(searchRequest)) {
+                if (item.getName().toLowerCase().contains(searchRequest) ||
+                        item.getDescription().toLowerCase().contains(searchRequest)) {
                     searchResult.add(item);
                 }
             }
