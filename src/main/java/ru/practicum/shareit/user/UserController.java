@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.validationGroup.Create;
 import ru.practicum.shareit.validationGroup.Update;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<User> getAllUsers() {
+    public List<User> getAllUsers() {
         log.info("Запрошен список всех пользователей");
         return userService.getAllUsers();
     }

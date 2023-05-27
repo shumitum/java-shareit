@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/items")
@@ -45,15 +45,15 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDto> getUserItems(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<ItemDto> getUserItems(@RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("Пользователь с ID={} запросил список своих вещей", userId);
         return itemService.getUserItems(userId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDto> searchItem(@RequestParam("text") String searchRequest,
-                                          @RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<ItemDto> searchItem(@RequestParam("text") String searchRequest,
+                                    @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("Пользователь с ID={} пытался найти: \"{}\"", userId, searchRequest);
         return itemService.searchItem(searchRequest, userId);
     }
