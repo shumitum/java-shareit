@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.shareit.validationgroup.Create;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class ItemDto {
     private long id;
-    @NotBlank
+    @NotBlank(groups = Create.class, message = "Поле Имя не должно быть пустым")
     private String name;
-    @NotBlank
+    @NotBlank(groups = Create.class, message = "Поле Описание не должно быть пустым")
     private String description;
-    @NotNull
+    @NotNull(groups = Create.class, message = "Поле Доступность к аренде не должно быть пустым")
     private Boolean available;
 }

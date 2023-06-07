@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.validationGroup.Create;
-import ru.practicum.shareit.validationGroup.Update;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.validationgroup.Create;
+import ru.practicum.shareit.validationgroup.Update;
 
 import java.util.List;
 
@@ -15,40 +16,38 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserValidateService userValidateService;
     private final UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createuser(@RequestBody @Validated(Create.class) User user) {
-        userValidateService.validateEmail(user.getEmail());
-        User newUser = userService.createUser(user);
-        log.info("Создан пользователь: {}", newUser);
-        return newUser;
+    public UserDto createUser(@RequestBody @Validated(Create.class) UserDto userDto) {
+        UserDto newUserDto = userService.createUser(userDto);
+        log.info("Создан пользователь: {}", newUserDto);
+        return newUserDto;
     }
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable long userId) {
-        User user = userService.getUserById(userId);
-        log.info("Запрошен пользователь с ID={} {}", userId, user);
-        return user;
+    public UserDto getUserById(@PathVariable long userId) {
+        UserDto userDto = userService.getUserById(userId);
+        log.info("Запрошен пользователь с ID={} {}", userId, userDto);
+        return userDto;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("Запрошен список всех пользователей");
         return userService.getAllUsers();
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@PathVariable long userId,
-                           @RequestBody @Validated(Update.class) User user) {
-        User updatedUser = userService.updateUser(userId, user);
-        log.info("Данные пользователя c ID={} обновлены: {}", userId, updatedUser);
-        return updatedUser;
+    public UserDto updateUser(@PathVariable long userId,
+                           @RequestBody @Validated(Update.class) UserDto userDto) {
+        UserDto updatedUserDto = userService.updateUser(userId, userDto);
+        log.info("Данные пользователя c ID={} обновлены: {}", userId, updatedUserDto);
+        return updatedUserDto;
     }
 
     @DeleteMapping("/{userId}")
