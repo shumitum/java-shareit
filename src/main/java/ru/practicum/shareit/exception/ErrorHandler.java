@@ -11,13 +11,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
-/*    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleIllegalEmailException(final IllegalEmailException e) {
-        log.warn(HttpStatus.CONFLICT + " " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }*/
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchElementException(final NoSuchElementException e) {

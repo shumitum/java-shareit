@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.validationgroup.Create;
 
@@ -65,5 +66,15 @@ public class ItemController {
                                @RequestHeader("X-Sharer-User-Id") long userId) {
         itemService.deleteItemById(itemId, userId);
         log.info("Вещь с ID={} удалена владельцем", itemId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto createComment(@RequestBody @Validated(Create.class) CommentDto comment,
+                                    @PathVariable long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") long commentatorId) {
+        CommentDto newComment = itemService.createComment(comment, itemId, commentatorId);
+        log.info("Пользователь с ID={} оставил комментарий вещи с ID={}", commentatorId, itemId);
+        return newComment;
     }
 }

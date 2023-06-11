@@ -26,7 +26,7 @@ public class Item {
     @Column(nullable = false)
     private Boolean available;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
     @ToString.Exclude
     private User owner;

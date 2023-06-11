@@ -54,7 +54,7 @@ public class BookingController {
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> getOwnerItemsByState(@RequestParam(defaultValue = "ALL") String state,
-                                              @RequestHeader("X-Sharer-User-Id") long ownerId) {
+                                                 @RequestHeader("X-Sharer-User-Id") long ownerId) {
         log.info("Пользователем с ID={} запросил список своих вещей со статусом: {}", ownerId, state);
         return bookingService.getOwnerItemsByState(ownerId, state);
     }

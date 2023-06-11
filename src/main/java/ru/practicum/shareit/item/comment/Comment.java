@@ -1,11 +1,11 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.item.comment;
 
 import lombok.*;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -23,13 +23,15 @@ public class Comment {
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     @ToString.Exclude
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", referencedColumnName = "user_id")
     @ToString.Exclude
-    private User authorName;
+    private User author;
 
-    @Transient
-    private Timestamp created;
+    @Column(nullable = false)
+    private LocalDateTime created;
 }
