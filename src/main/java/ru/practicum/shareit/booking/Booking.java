@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,10 +20,10 @@ public class Booking {
     private long id;
 
     @Column(name = "start_time")
-    private Timestamp start;
+    private LocalDateTime start;
 
     @Column(name = "end_time")
-    private Timestamp end;
+    private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
@@ -36,5 +36,6 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private BookingStatus status;
 }

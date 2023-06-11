@@ -3,24 +3,26 @@ package ru.practicum.shareit.booking.dto;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.validationgroup.Create;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class BookingDto {
     private long id;
-    @NotBlank(groups = Create.class, message = "Поле Время начала бронирования не должно быть пустым")
-    private Timestamp start;
-    @NotBlank(groups = Create.class, message = "Поле Время конца бронирования не должно быть пустым")
-    private Timestamp end;
-    private Item item;
-    private User booker;
+    @Future
+    @NotNull(message = "Поле Время начала бронирования не должно быть пустым")
+    private LocalDateTime start;
+    @Future
+    @NotNull(message = "Поле Время конца бронирования не должно быть пустым")
+    private LocalDateTime end;
+    private ItemDto item;
+    private UserDto booker;
     private BookingStatus status;
-    @NotBlank(groups = Create.class, message = "Поле ID вещи бронирования не должно быть пустым")
+    @NotNull(message = "Поле ID вещи бронирования не должно быть пустым")
     private long itemId;
 }

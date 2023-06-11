@@ -4,7 +4,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 public class ItemMapper {
 
-    public static Item itemDtoToItem(ItemDto itemDto) {
+    public static Item toItem(ItemDto itemDto) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
@@ -12,7 +12,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemDto itemToItemDto(Item item) {
+    public static ItemDto toItemDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
