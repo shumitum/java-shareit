@@ -9,6 +9,8 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.practicum.shareit.item.ItemController.USER_ID_HEADER;
+
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto createBooking(@RequestBody @Valid BookingDto bookingDto,
-                                    @RequestHeader("X-Sharer-User-Id") long bookerId) {
+                                    @RequestHeader(USER_ID_HEADER) long bookerId) {
         BookingDto newBookingDto = bookingService.createBooking(bookingDto, bookerId);
         log.info("Создан новый запрос на бронирование: {}", newBookingDto);
         return newBookingDto;
@@ -29,7 +31,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public BookingDto approveBooking(@PathVariable long bookingId,
                                      @RequestParam boolean approved,
-                                     @RequestHeader("X-Sharer-User-Id") long userId) {
+                                     @RequestHeader(USER_ID_HEADER) long userId) {
         BookingDto bookingDto = bookingService.approveBooking(bookingId, approved, userId);
         log.info("Статус заявки на бронирование вещи с ID={} изменен на: {}", bookingId, approved);
         return bookingDto;
@@ -38,7 +40,7 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto getBookingById(@PathVariable long bookingId,
-                                     @RequestHeader("X-Sharer-User-Id") long userId) {
+                                     @RequestHeader(USER_ID_HEADER) long userId) {
         log.info("Пользователем с ID={} запрошена заявка на бронирование с ID={}", userId, bookingId);
         return bookingService.getBookingById(bookingId, userId);
     }
@@ -46,7 +48,7 @@ public class BookingController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> getUserBookingsByState(@RequestParam(defaultValue = "ALL") String state,
-                                                   @RequestHeader("X-Sharer-User-Id") long userId) {
+                                                   @RequestHeader(USER_ID_HEADER) long userId) {
         log.info("Пользователем с ID={} запрошены заявки на бронирование со статусом: {}", userId, state);
         return bookingService.getBookingByUserIdAndState(userId, state);
     }
@@ -54,7 +56,7 @@ public class BookingController {
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> getOwnerItemsByState(@RequestParam(defaultValue = "ALL") String state,
-                                                 @RequestHeader("X-Sharer-User-Id") long ownerId) {
+                                                 @RequestHeader(USER_ID_HEADER) long ownerId) {
         log.info("Пользователем с ID={} запросил список своих вещей со статусом: {}", ownerId, state);
         return bookingService.getOwnerItemsByState(ownerId, state);
     }

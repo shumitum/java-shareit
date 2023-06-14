@@ -19,7 +19,10 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -67,13 +70,12 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.groupingBy(comment -> comment.getItem().getId(),
                         mapping(CommentMapper::toCommentDto, Collectors.toList())));
-        return itemRepository.findAllByOwnerId(userId)
+        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .peek(item -> item.setLastBooking(getLastBookingInfoDto(item.getId())))
                 .peek(item -> item.setNextBooking(getNextBookingInfoDto(item.getId())))
                 .peek(item -> item.setComments(commentsByItemId.get(item.getId())))
-                .sorted(Comparator.comparingLong(ItemDto::getId))
                 .collect(Collectors.toList());
     }
 
@@ -109,7 +111,7 @@ public class ItemServiceImpl implements ItemService {
         } else {
             throw new IllegalArgumentException("Редактировать информацию о вещи может только её владелец");
         }
-        return ItemMapper.toItemDto(itemRepository.save(updatingItem));
+        return ItemMapper.toItemDto(updatingItem);
     }
 
     @Transactional
@@ -130,7 +132,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item findItemById(long itemId) {
         return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NoSuchElementException("Вещи с ID=" + itemId + " не существует"));
+                .orElseThrow(() -> new NoSuchElementException(String.format("Вещи с ID=%d не существует", itemId)));
     }
 
     @Transactional
@@ -141,8 +143,8 @@ public class ItemServiceImpl implements ItemService {
         bookingRepository.findByBookerIdAndItemIdAndEndBefore(commentatorId, itemId, LocalDateTime.now())
                 .stream()
                 .findAny()
-                .orElseThrow(() -> new InvalidArgumentException("Пользователь с ID=" + commentatorId
-                        + " не брал в аренду вещь с ID=" + itemId));
+                .orElseThrow(() -> new InvalidArgumentException(String.format("Пользователь с ID=%d не может "
+                        + "комментировать вещь с ID=%d, которую ранее не арендовал", commentatorId, itemId)));
         Comment comment = Comment.builder()
                 .text(commentDto.getText())
                 .item(item)

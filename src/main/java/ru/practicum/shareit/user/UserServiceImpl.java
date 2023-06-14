@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getName() != null) {
             updatingUser.setName(userDto.getName());
         }
-        return UserMapper.toUserDto(userRepository.save(updatingUser));
+        return UserMapper.toUserDto(updatingUser);
     }
 
     @Transactional
@@ -61,13 +61,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public void checkUserExistence(long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new NoSuchElementException("Пользователя с ID=" + userId + " не существует");
+            throw new NoSuchElementException(String.format("Пользователя с ID=%d не существует", userId));
         }
     }
 
     @Transactional(readOnly = true)
     public User findUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Пользователя с ID=" + userId + " не существует"));
+                .orElseThrow(() -> new NoSuchElementException(String.format("Пользователя с ID=%d не существует", userId)));
     }
 }

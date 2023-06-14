@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.comment;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 
+@UtilityClass
 public class CommentMapper {
-    public static CommentDto toCommentDto(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -12,7 +14,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public static Comment toComment(CommentDto comment) {
+    public Comment toComment(CommentDto comment) {
         return Comment.builder()
                 .text(comment.getText())
                 .build();

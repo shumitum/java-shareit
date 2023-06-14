@@ -1,9 +1,11 @@
 package ru.practicum.shareit.request;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
+@UtilityClass
 public class ItemRequestMapper {
-    public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
+    public ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         return ItemRequestDto.builder()
                 .id(itemRequest.getId())
                 .description(itemRequest.getDescription())
@@ -12,7 +14,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    public static ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
+    public ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
         return ItemRequest.builder()
                 .description(itemRequestDto.getDescription())
                 .requestor(itemRequestDto.getRequestor())

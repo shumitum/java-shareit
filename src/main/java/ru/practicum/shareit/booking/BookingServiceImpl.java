@@ -61,9 +61,9 @@ public class BookingServiceImpl implements BookingService {
                 booking.setStatus(BookingStatus.REJECTED);
             }
         } else {
-            throw new InvalidArgumentException("Заявка на бронирование уже " + booking.getStatus() + "владельцем");
+            throw new InvalidArgumentException(String.format("Заявка на бронирование уже %s владельцем", booking.getStatus()));
         }
-        return BookingMapper.toBookingDto(bookingRepository.save(booking));
+        return BookingMapper.toBookingDto(booking);
     }
 
     @Transactional(readOnly = true)
@@ -148,6 +148,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking findBookingById(long bookingId) {
         return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NoSuchElementException("Бронирование с ID=" + bookingId + " не существует"));
+                .orElseThrow(() -> new NoSuchElementException(String.format("Бронирование с ID=%d не существует", bookingId)));
     }
 }
