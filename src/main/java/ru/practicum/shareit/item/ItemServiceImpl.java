@@ -39,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto createItem(ItemDto itemDto, long userId) {
-        Item item = ItemMapper.toItem(itemDto);
+        final Item item = ItemMapper.toItem(itemDto);
         item.setOwner(userService.findUserById(userId));
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
@@ -48,8 +48,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto getItemById(long itemId, long userId) {
         userService.checkUserExistence(userId);
-        Item item = findItemById(itemId);
-        ItemDto itemDto = ItemMapper.toItemDto(item);
+        final Item item = findItemById(itemId);
+        final ItemDto itemDto = ItemMapper.toItemDto(item);
         if (userId == item.getOwner().getId()) {
             itemDto.setLastBooking(getLastBookingInfoDto(itemId));
             itemDto.setNextBooking(getNextBookingInfoDto(itemId));
@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto updateItem(long itemId, ItemDto itemDto, long ownerId) {
-        Item updatingItem = findItemById(itemId);
+        final Item updatingItem = findItemById(itemId);
         if (ownerId == updatingItem.getOwner().getId()) {
             if (itemDto.getName() != null) {
                 updatingItem.setName(itemDto.getName());
@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItemById(long itemId, long userId) {
         userService.checkUserExistence(userId);
-        Item item = findItemById(itemId);
+        final Item item = findItemById(itemId);
         if (item.getOwner().getId() == userId) {
             if (item.getAvailable()) {
                 itemRepository.deleteById(itemId);
@@ -138,14 +138,14 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public CommentDto createComment(CommentDto commentDto, long itemId, long commentatorId) {
-        User commentator = userService.findUserById(commentatorId);
-        Item item = findItemById(itemId);
+        final User commentator = userService.findUserById(commentatorId);
+        final Item item = findItemById(itemId);
         bookingRepository.findByBookerIdAndItemIdAndEndBefore(commentatorId, itemId, LocalDateTime.now())
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new InvalidArgumentException(String.format("Пользователь с ID=%d не может "
                         + "комментировать вещь с ID=%d, которую ранее не арендовал", commentatorId, itemId)));
-        Comment comment = Comment.builder()
+        final Comment comment = Comment.builder()
                 .text(commentDto.getText())
                 .item(item)
                 .author(commentator)

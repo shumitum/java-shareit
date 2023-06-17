@@ -5,6 +5,7 @@ import lombok.Data;
 import ru.practicum.shareit.validationgroup.Create;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -16,5 +17,6 @@ public class CommentDto {
     @Size(max = 255)
     private String text;
     private String authorName;
+    @NotNull
     private LocalDateTime created;
 }

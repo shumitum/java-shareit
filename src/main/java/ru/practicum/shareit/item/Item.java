@@ -4,6 +4,8 @@ import lombok.*;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -17,13 +19,14 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @NotBlank
     private String name;
 
-    @Column(nullable = false)
+    @NotBlank
     private String description;
 
     @Column(nullable = false)
+    @NotNull
     private Boolean available;
 
     @ManyToOne(fetch = FetchType.LAZY)

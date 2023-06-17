@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -15,7 +17,9 @@ import java.time.LocalDateTime;
 public class ItemRequestDto {
     private long id;
     @Size(max = 255)
+    @NotBlank
     private String description;
     private User requestor;
+    @NotNull
     private LocalDateTime created;
 }

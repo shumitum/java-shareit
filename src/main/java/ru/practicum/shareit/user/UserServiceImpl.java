@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto updateUser(long userId, UserDto userDto) {
-        User updatingUser = findUserById(userId);
+        final User updatingUser = findUserById(userId);
         if (userDto.getEmail() != null) {
             if (!updatingUser.getEmail().equals(userDto.getEmail())) {
                 updatingUser.setEmail(userDto.getEmail());

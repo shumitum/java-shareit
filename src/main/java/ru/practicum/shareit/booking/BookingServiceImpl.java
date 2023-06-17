@@ -25,8 +25,8 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     @Override
     public BookingDto createBooking(BookingDto bookingDto, long bookerId) {
-        Item item = itemService.findItemById(bookingDto.getItemId());
-        User booker = userService.findUserById(bookerId);
+        final Item item = itemService.findItemById(bookingDto.getItemId());
+        final User booker = userService.findUserById(bookerId);
         if (!item.getAvailable()) {
             throw new InvalidArgumentException("Вещь недоступна для бронирования");
         }
@@ -39,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
         if (bookerId == item.getOwner().getId()) {
             throw new NoSuchElementException("Бронирование собственных вещей невозможно");
         }
-        Booking newBooking = BookingMapper.toBooking(bookingDto);
+        final Booking newBooking = BookingMapper.toBooking(bookingDto);
         newBooking.setBooker(booker);
         newBooking.setItem(item);
         newBooking.setStatus(BookingStatus.WAITING);
@@ -50,7 +50,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto approveBooking(long bookingId, boolean approved, long userId) {
         userService.checkUserExistence(userId);
-        Booking booking = findBookingById(bookingId);
+        final Booking booking = findBookingById(bookingId);
         if (userId != booking.getItem().getOwner().getId()) {
             throw new NoSuchElementException("Только владелец вещи может подтверждать/отклонять бронирование");
         }

@@ -5,6 +5,7 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,10 +20,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
+    @NotNull
     private LocalDateTime start;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time")
+    @NotNull
     private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +39,6 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @NotNull
     private BookingStatus status;
 }
