@@ -2,48 +2,72 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserValidateService userValidateService;
 
+    @Transactional
     @Override
-    public User createUser(User user) {
-        return userRepository.createUser(user);
+    public UserDto createUser(UserDto userDto) {
+        User user = userRepository.save(UserMapper.toUser(userDto));
+        return UserMapper.toUserDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public User getUserById(long userId) {
-        return userRepository.getUserById(userId);
+    public UserDto getUserById(long userId) {
+        return UserMapper.toUserDto(findUserById(userId));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
-    public User updateUser(long userId, User user) {
-        User updatingUser = userRepository.getUserById(userId);
-        if (user.getEmail() != null) {
-            if (!updatingUser.getEmail().equals(user.getEmail())) {
-                userValidateService.validateEmail(user.getEmail());
-                updatingUser.setEmail(user.getEmail());
+    public UserDto updateUser(long userId, UserDto userDto) {
+        User updatingUser = findUserById(userId);
+        if (userDto.getEmail() != null) {
+            if (!updatingUser.getEmail().equals(userDto.getEmail())) {
+                updatingUser.setEmail(userDto.getEmail());
             }
         }
-        if (user.getName() != null) {
-            updatingUser.setName(user.getName());
+        if (userDto.getName() != null) {
+            updatingUser.setName(userDto.getName());
         }
-        return userRepository.updateUser(userId, updatingUser);
+        return UserMapper.toUserDto(updatingUser);
     }
 
+    @Transactional
     @Override
     public void deleteUserById(long userId) {
-        userRepository.getUserById(userId);
-        userRepository.deleteUserById(userId);
+        findUserById(userId);
+        userRepository.deleteById(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public void checkUserExistence(long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NoSuchElementException(String.format("Пользователя с ID=%d не существует", userId));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public User findUserById(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("Пользователя с ID=%d не существует", userId)));
     }
 }

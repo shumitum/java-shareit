@@ -12,23 +12,23 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class ErrorHandler {
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleIllegalEmailException(final IllegalEmailException e) {
-        log.warn(HttpStatus.CONFLICT + " " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchElementException(final NoSuchElementException e) {
-        log.warn(HttpStatus.NOT_FOUND + " " + e.getMessage());
+        log.warn("Получен статус 404 NOT FOUND {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
-        log.warn(HttpStatus.FORBIDDEN + " " + e.getMessage());
+        log.warn("Получен статус 403 FORBIDDEN {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidArgumentException(final InvalidArgumentException e) {
+        log.warn("Получен статус 400 BAD REQUEST {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 }
