@@ -21,6 +21,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserService userService;
     private final ItemService itemService;
+    private final BookingMapper bookingMapper;
 
     @Transactional
     @Override
@@ -39,11 +40,11 @@ public class BookingServiceImpl implements BookingService {
         if (bookerId == item.getOwner().getId()) {
             throw new NoSuchElementException("Бронирование собственных вещей невозможно");
         }
-        final Booking newBooking = BookingMapper.toBooking(bookingDto);
+        final Booking newBooking = bookingMapper.toBooking(bookingDto);
         newBooking.setBooker(booker);
         newBooking.setItem(item);
         newBooking.setStatus(BookingStatus.WAITING);
-        return BookingMapper.toBookingDto(bookingRepository.save(newBooking));
+        return bookingMapper.toBookingDto(bookingRepository.save(newBooking));
     }
 
     @Transactional
@@ -63,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
         } else {
             throw new InvalidArgumentException(String.format("Заявка на бронирование уже %s владельцем", booking.getStatus()));
         }
-        return BookingMapper.toBookingDto(booking);
+        return bookingMapper.toBookingDto(booking);
     }
 
     @Transactional(readOnly = true)
@@ -72,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
         userService.checkUserExistence(userId);
         if (userId == findBookingById(bookingId).getBooker().getId() ||
                 userId == findBookingById(bookingId).getItem().getOwner().getId()) {
-            return BookingMapper.toBookingDto(findBookingById(bookingId));
+            return bookingMapper.toBookingDto(findBookingById(bookingId));
         } else {
             throw new NoSuchElementException("Получение данных о бронировании может только владелец или арендатор вещи");
         }
@@ -107,7 +108,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new InvalidArgumentException("Unknown state: UNSUPPORTED_STATUS");
         }
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(bookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
 
@@ -140,7 +141,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new InvalidArgumentException("Unknown state: UNSUPPORTED_STATUS");
         }
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(bookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
 

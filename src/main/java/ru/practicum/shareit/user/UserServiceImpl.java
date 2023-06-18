@@ -13,18 +13,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = userRepository.save(UserMapper.toUser(userDto));
-        return UserMapper.toUserDto(user);
+        User user = userRepository.save(userMapper.toUser(userDto));
+        return userMapper.toUserDto(user);
     }
 
     @Transactional(readOnly = true)
     @Override
     public UserDto getUserById(long userId) {
-        return UserMapper.toUserDto(findUserById(userId));
+        return userMapper.toUserDto(findUserById(userId));
     }
 
     @Transactional(readOnly = true)
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserMapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getName() != null) {
             updatingUser.setName(userDto.getName());
         }
-        return UserMapper.toUserDto(updatingUser);
+        return userMapper.toUserDto(updatingUser);
     }
 
     @Transactional
