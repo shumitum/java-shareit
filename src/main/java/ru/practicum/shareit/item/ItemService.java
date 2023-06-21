@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.GetItemParam;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface ItemService {
 
     ItemDto getItemById(long itemId, long userId);
 
-    List<ItemDto> getUserItems(long userId);
+    List<ItemDto> getUserItems(GetItemParam params);
 
-    List<ItemDto> searchItem(String searchRequest, long userId);
+    List<ItemDto> searchItem(String searchRequest, GetItemParam params);
 
     void deleteItemById(long itemId, long userId);
 

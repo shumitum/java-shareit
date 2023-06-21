@@ -14,12 +14,14 @@ import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.CommentMapper;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.GetItemParam;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -31,8 +33,9 @@ import static java.util.stream.Collectors.mapping;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-    private final ItemRepository itemRepository;
     private final UserService userService;
+    private final ItemRequestRepository itemRequestRepository;
+    private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemMapper itemMapper;
@@ -44,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto createItem(ItemDto itemDto, long userId) {
         final Item item = itemMapper.toItem(itemDto);
         item.setOwner(userService.findUserById(userId));
+        item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElse(null));
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -67,13 +71,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ItemDto> getUserItems(long userId) {
+    public List<ItemDto> getUserItems(GetItemParam params) {
+        final long userId = params.getUserId();
         userService.checkUserExistence(userId);
         Map<Long, List<CommentDto>> commentsByItemId = commentRepository.findByItemOwnerId(userId)
                 .stream()
                 .collect(Collectors.groupingBy(comment -> comment.getItem().getId(),
                         mapping(commentMapper::toCommentDto, Collectors.toList())));
-        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId)
+        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId, params.getPage()).getContent()
                 .stream()
                 .map(itemMapper::toItemDto)
                 .peek(item -> item.setLastBooking(getLastBookingInfoDto(item.getId())))
@@ -84,16 +89,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ItemDto> searchItem(String searchRequest, long userId) {
+    public List<ItemDto> searchItem(String searchRequest, GetItemParam params) {
         if (!searchRequest.isBlank()) {
-            userService.checkUserExistence(userId);
-            return itemRepository.findItem(searchRequest.trim())
+            userService.checkUserExistence(params.getUserId());
+            return itemRepository.findItem(searchRequest.trim(), params.getPage()).getContent()
                     .stream()
-                    .filter(Item::getAvailable)
                     .map(itemMapper::toItemDto)
                     .collect(Collectors.toList());
         } else {
-            return new LinkedList<>();
+            return Collections.emptyList();
         }
     }
 
@@ -157,14 +161,16 @@ public class ItemServiceImpl implements ItemService {
         return commentMapper.toCommentDto(commentRepository.save(comment));
     }
 
-    private BookingInfoDto getLastBookingInfoDto(long itemId) {
+    @Transactional(readOnly = true)
+    public BookingInfoDto getLastBookingInfoDto(long itemId) {
         findItemById(itemId);
         List<Booking> bookings = bookingRepository.findByItemIdAndStartBeforeAndStatusOrderByStartDesc(itemId,
                 LocalDateTime.now(), BookingStatus.APPROVED);
         return !bookings.isEmpty() ? bookingMapper.toBookingInfoDto(bookings.get(0)) : null;
     }
 
-    private BookingInfoDto getNextBookingInfoDto(long itemId) {
+    @Transactional(readOnly = true)
+    public BookingInfoDto getNextBookingInfoDto(long itemId) {
         findItemById(itemId);
         List<Booking> bookings = bookingRepository.findByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId,
                 LocalDateTime.now(), BookingStatus.APPROVED);

@@ -24,6 +24,7 @@ public class ItemRequest {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestor_id", referencedColumnName = "user_id")
     @ToString.Exclude
     private User requestor;
 
