@@ -88,27 +88,27 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (params.getState()) {
             case "ALL":
-                bookings = bookingRepository.findByBookerIdOrderByStartDesc(userId, params.getPage()).getContent();
+                bookings = bookingRepository.findByBookerIdOrderByStartDesc(userId, params.getPage());
                 break;
             case "CURRENT":
                 bookings = bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId,
-                        LocalDateTime.now(), LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), LocalDateTime.now(), params.getPage());
                 break;
             case "PAST":
                 bookings = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId,
-                        LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), params.getPage());
                 break;
             case "FUTURE":
                 bookings = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId,
-                        LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), params.getPage());
                 break;
             case "WAITING":
                 bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId,
-                        BookingStatus.WAITING, params.getPage()).getContent();
+                        BookingStatus.WAITING, params.getPage());
                 break;
             case "REJECTED":
                 bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId,
-                        BookingStatus.REJECTED, params.getPage()).getContent();
+                        BookingStatus.REJECTED, params.getPage());
                 break;
             default:
                 throw new InvalidArgumentException("Unknown state: UNSUPPORTED_STATUS");
@@ -126,27 +126,27 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (params.getState()) {
             case "ALL":
-                bookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(userId, params.getPage()).getContent();
+                bookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(userId, params.getPage());
                 break;
             case "CURRENT":
                 bookings = bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId,
-                        LocalDateTime.now(), LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), LocalDateTime.now(), params.getPage());
                 break;
             case "PAST":
                 bookings = bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(userId,
-                        LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), params.getPage());
                 break;
             case "FUTURE":
                 bookings = bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(userId,
-                        LocalDateTime.now(), params.getPage()).getContent();
+                        LocalDateTime.now(), params.getPage());
                 break;
             case "WAITING":
                 bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId,
-                        BookingStatus.WAITING, params.getPage()).getContent();
+                        BookingStatus.WAITING, params.getPage());
                 break;
             case "REJECTED":
                 bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId,
-                        BookingStatus.REJECTED, params.getPage()).getContent();
+                        BookingStatus.REJECTED, params.getPage());
                 break;
             default:
                 throw new InvalidArgumentException("Unknown state: UNSUPPORTED_STATUS");

@@ -63,8 +63,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestDto> getOthersItemRequests(GetItemsRequestParam params) {
         final long userId = params.getUserId();
         userService.checkUserExistence(userId);
-        return itemRequestRepository.findItemRequestsByRequestorIdNotOrderByCreatedDesc(userId,
-                        params.getPage()).getContent()
+        return itemRequestRepository.findItemRequestsByRequestorIdNotOrderByCreatedDesc(userId, params.getPage())
                 .stream()
                 .map(itemRequestMapper::toItemRequestDto)
                 .peek(itemRequest -> itemRequest.setItems(getItemDtoList(itemRequest.getId())))

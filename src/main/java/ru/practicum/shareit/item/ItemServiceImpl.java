@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.groupingBy(comment -> comment.getItem().getId(),
                         mapping(commentMapper::toCommentDto, Collectors.toList())));
-        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId, params.getPage()).getContent()
+        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId, params.getPage())
                 .stream()
                 .map(itemMapper::toItemDto)
                 .peek(item -> item.setLastBooking(getLastBookingInfoDto(item.getId())))
@@ -92,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> searchItem(String searchRequest, GetItemParam params) {
         if (!searchRequest.isBlank()) {
             userService.checkUserExistence(params.getUserId());
-            return itemRepository.findItem(searchRequest.trim(), params.getPage()).getContent()
+            return itemRepository.findItem(searchRequest.trim(), params.getPage())
                     .stream()
                     .map(itemMapper::toItemDto)
                     .collect(Collectors.toList());
