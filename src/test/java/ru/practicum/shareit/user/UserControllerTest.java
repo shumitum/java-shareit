@@ -122,9 +122,9 @@ class UserControllerTest {
     @Test
     @SneakyThrows
     void deleteUserById_whenInvoked_thenReturnedOkStatus() {
-      mockMvc.perform(delete("/users/{userId}", user.getId()))
-              .andExpect(status().isOk());
+        mockMvc.perform(delete("/users/{userId}", user.getId()))
+                .andExpect(status().isOk());
 
-      verify(userService, times(1)).deleteUserById(user.getId());
+        verify(userService, times(1)).deleteUserById(user.getId());
     }
 }

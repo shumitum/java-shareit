@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.comment.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.validationgroup.Create;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +10,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDto {
     private long id;
     @NotBlank(groups = Create.class, message = "Поле Комментарий не должно быть пустым")

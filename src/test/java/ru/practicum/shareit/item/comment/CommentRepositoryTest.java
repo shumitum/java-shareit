@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.comment;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 class CommentRepositoryTest {
@@ -48,18 +47,13 @@ class CommentRepositoryTest {
                 .author(user)
                 .created(LocalDateTime.now())
                 .build();
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void findByItemId() {
         tem.persist(user);
         tem.persist(item);
         tem.persist(comment);
+    }
 
+    @Test
+    void findByItemId_whenInvoked_returnedCorrectCommentList() {
         List<Comment> comments = commentRepository.findByItemId(item.getId());
 
         assertEquals(1, comments.size());
@@ -67,16 +61,13 @@ class CommentRepositoryTest {
     }
 
     @Test
-    void findByItemOwnerId() {
+    void findByItemOwnerId_whenInvokedWithValidOwnerId_thenReturnedCorrectCommentList() {
         Comment newComment = Comment.builder()
                 .text("text1")
                 .item(item)
                 .author(user)
                 .created(LocalDateTime.now())
                 .build();
-        tem.persist(user);
-        tem.persist(item);
-        tem.persist(comment);
         tem.persist(newComment);
 
         List<Comment> comments = commentRepository.findByItemOwnerId(user.getId()).stream()

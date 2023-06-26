@@ -105,7 +105,7 @@ class BookingControllerTest {
 
     @Test
     @SneakyThrows
-    void getUserBookingsByState() {
+    void getUserBookingsByState_whenInvokedWithCorrectParams_thenReturnedUserBookings() {
         long userId = 2L;
         List<BookingDto> bookings = List.of(booking);
         when(bookingService.getBookingByUserIdAndState(GetBookingsParam.of(userId, "ALL", 0, 10)))
@@ -128,7 +128,7 @@ class BookingControllerTest {
 
     @Test
     @SneakyThrows
-    void getOwnerItemsByState() {
+    void getOwnerItemsByState_whenInvokes_thenReturnedOwnerItemsByState() {
         long ownerId = 2L;
         String state = "ALL";
         List<BookingDto> bookings = List.of(booking);
