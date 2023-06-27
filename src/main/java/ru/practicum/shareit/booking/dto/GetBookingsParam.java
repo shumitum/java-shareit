@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import ru.practicum.shareit.booking.BookingState;
+import ru.practicum.shareit.exception.InvalidArgumentException;
 
 @Data
 @AllArgsConstructor
@@ -24,6 +26,16 @@ public class GetBookingsParam {
                 .from(from)
                 .size(size)
                 .build();
+    }
+
+    public BookingState getBookingState() {
+        BookingState newState;
+        try {
+            newState = BookingState.valueOf(state);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidArgumentException("Unknown state: UNSUPPORTED_STATUS");
+        }
+        return newState;
     }
 
     public PageRequest getPage() {

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
@@ -20,10 +19,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
-    @NotBlank
+    @Column(nullable = false, unique = true)
     private String email;
 }

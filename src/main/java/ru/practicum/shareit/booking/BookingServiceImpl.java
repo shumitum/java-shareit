@@ -86,27 +86,27 @@ public class BookingServiceImpl implements BookingService {
         final long userId = params.getUserId();
         userService.checkUserExistence(userId);
         List<Booking> bookings;
-        switch (params.getState()) {
-            case "ALL":
+        switch (params.getBookingState()) {
+            case ALL:
                 bookings = bookingRepository.findByBookerIdOrderByStartDesc(userId, params.getPage());
                 break;
-            case "CURRENT":
+            case CURRENT:
                 bookings = bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId,
                         LocalDateTime.now(), LocalDateTime.now(), params.getPage());
                 break;
-            case "PAST":
+            case PAST:
                 bookings = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId,
                         LocalDateTime.now(), params.getPage());
                 break;
-            case "FUTURE":
+            case FUTURE:
                 bookings = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId,
                         LocalDateTime.now(), params.getPage());
                 break;
-            case "WAITING":
+            case WAITING:
                 bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId,
                         BookingStatus.WAITING, params.getPage());
                 break;
-            case "REJECTED":
+            case REJECTED:
                 bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId,
                         BookingStatus.REJECTED, params.getPage());
                 break;
@@ -124,27 +124,27 @@ public class BookingServiceImpl implements BookingService {
         final long userId = params.getUserId();
         userService.checkUserExistence(userId);
         List<Booking> bookings;
-        switch (params.getState()) {
-            case "ALL":
+        switch (params.getBookingState()) {
+            case ALL:
                 bookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(userId, params.getPage());
                 break;
-            case "CURRENT":
+            case CURRENT:
                 bookings = bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId,
                         LocalDateTime.now(), LocalDateTime.now(), params.getPage());
                 break;
-            case "PAST":
+            case PAST:
                 bookings = bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(userId,
                         LocalDateTime.now(), params.getPage());
                 break;
-            case "FUTURE":
+            case FUTURE:
                 bookings = bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(userId,
                         LocalDateTime.now(), params.getPage());
                 break;
-            case "WAITING":
+            case WAITING:
                 bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId,
                         BookingStatus.WAITING, params.getPage());
                 break;
-            case "REJECTED":
+            case REJECTED:
                 bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId,
                         BookingStatus.REJECTED, params.getPage());
                 break;
