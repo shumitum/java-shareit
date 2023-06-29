@@ -6,14 +6,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.GetItemParam;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.validationgroup.Create;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
@@ -48,17 +52,21 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getUserItems(@RequestHeader(USER_ID_HEADER) long userId) {
+    public List<ItemDto> getUserItems(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                      @RequestParam(required = false, defaultValue = "10") @Positive Integer size,
+                                      @RequestHeader(USER_ID_HEADER) long userId) {
         log.info("Пользователь с ID={} запросил список своих вещей", userId);
-        return itemService.getUserItems(userId);
+        return itemService.getUserItems(GetItemParam.of(userId, from, size));
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> searchItem(@RequestParam("text") String searchRequest,
+                                    @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                    @RequestParam(required = false, defaultValue = "10") @Positive Integer size,
                                     @RequestHeader(USER_ID_HEADER) long userId) {
         log.info("Пользователь с ID={} пытался найти: \"{}\"", userId, searchRequest);
-        return itemService.searchItem(searchRequest, userId);
+        return itemService.searchItem(searchRequest, GetItemParam.of(userId, from, size));
     }
 
     @DeleteMapping("/{itemId}")
