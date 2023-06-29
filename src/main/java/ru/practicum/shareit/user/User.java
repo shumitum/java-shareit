@@ -6,22 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
-@Builder
 @Entity
-@Table(name = "users", schema = "public")
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users", schema = "public")
 public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Column(name = "email", unique = true)
     private String email;
 }

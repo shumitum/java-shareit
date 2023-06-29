@@ -5,6 +5,7 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -20,7 +21,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Column(name = "text")
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,5 +36,6 @@ public class Comment {
     private User author;
 
     @NotNull
+    @Column(name = "created")
     private LocalDateTime created;
 }

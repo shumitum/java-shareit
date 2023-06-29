@@ -20,12 +20,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "start_time")
     @NotNull
+    @Column(name = "start_time")
     private LocalDateTime start;
 
-    @Column(name = "end_time")
     @NotNull
+    @Column(name = "end_time")
     private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,7 +38,8 @@ public class Booking {
     @ToString.Exclude
     private User booker;
 
+    @NotNull
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private BookingStatus status;
 }
