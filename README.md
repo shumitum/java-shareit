@@ -1,4 +1,4 @@
-# ShareIt.
+# Яндекс Практикум. Проект ShareIt.
 Проект — сервис краткосрочной аренды вещей consumer-to-consumer.  
 Стек:  **Java 11, Spring Boot, Maven, PostgreSQL, Hibernate, Docker, REST,  JUnit,  Mockito.**
 
