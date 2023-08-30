@@ -35,5 +35,5 @@
 
 ---
 
-ER-диаграмма БД приложения:
+ER-диаграмма БД проекта:
 ![shareIt_er_diagram.png](shareIt_er_diagram.png)
