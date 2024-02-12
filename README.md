@@ -18,6 +18,8 @@ mvn clean package
 docker-compose up
 ```
 
+---
+
 ### EndPoints
 #### UserController:
 ```POST /users``` - создание нового пользователя;  
