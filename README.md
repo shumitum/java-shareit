@@ -50,5 +50,5 @@ docker-compose up
 
 ---
 
-ER-диаграмма БД проекта:
+ER-диаграмма БД проекта:  
 ![shareIt_er_diagram.png](shareIt_er_diagram.png)
