@@ -4,6 +4,20 @@
 Стек:  **Java 11, Spring Boot, Maven, PostgreSQL, Hibernate, Docker, REST,  JUnit,  Mockito.**
 
 ---
+
+### Запуск приложения
+
+Чтобы запустить приложение необходимо
+* Скачать или клонировать репозиторий (git clone https://github.com/shumitum/java-shareit.git)
+* Собрать проект командой
+```bash
+mvn clean package
+```
+* После успешной сборки запустить контейнеры командой
+```bash
+docker-compose up
+```
+
 ### EndPoints
 #### UserController:
 ```POST /users``` - создание нового пользователя;  
